@@ -208,10 +208,10 @@ input{
 <div id="m1" class="msg"></div>
 </section>
 
-<!-- SCREEN 2 -->
+<!-- SCREEN 2 (TRÔNE) -->
 <section id="s2" class="screen">
 <h1>Énigme 2</h1>
-<p>Entre le bon mot pour accéder à la révélation.</p>
+<p>Entre le bon mot pour accéder à la suite.</p>
 
 <div class="hintBox">
   <div class="hintCounter" id="counter2">Indice 1 / 3</div>
@@ -227,8 +227,27 @@ input{
 <div id="m2" class="msg"></div>
 </section>
 
-<!-- SCREEN 3 -->
+<!-- SCREEN 3 (BOOBA) -->
 <section id="s3" class="screen">
+<h1>Énigme 3</h1>
+<p>Entre le bon mot pour accéder à la révélation.</p>
+
+<div class="hintBox">
+  <div class="hintCounter" id="counter3">Indice 1 / 3</div>
+  <div id="h3_1">💡 Numéro 10.</div>
+  <div id="h3_2" style="display:none;">💡 Rap.</div>
+  <div id="h3_3" style="display:none;">💡 Duc de Boulogne.</div>
+</div>
+
+<button class="hintBtn" id="more3">Afficher un indice</button>
+
+<input id="a3" placeholder="Votre réponse">
+<button class="primaryBtn" id="b3">Valider</button>
+<div id="m3" class="msg"></div>
+</section>
+
+<!-- SCREEN 4 -->
+<section id="s4" class="screen">
 <h1>🎉 Révélation finale</h1>
 <p style="font-weight:800;text-align:center;">
 Pour découvrir la surprise…<br>👇 Cliquez ci-dessous 👇
@@ -241,7 +260,7 @@ loading="lazy">
 
 <a class="trackLink revealBtn"
 href="https://www.youtube.com/watch?v=QHuo2pIyTH8&list=RDQHuo2pIyTH8&start_radio=1"
-target="_blank">
+target="_blank" rel="noopener">
 🎵 PISTE 13 🎵
 </a>
 </section>
@@ -250,92 +269,130 @@ target="_blank">
 </div>
 
 <script>
-const VALID_CODES=["13"];
-const MAX_CODE_LEN=6;
+const VALID_CODES = ["13"];
+const MAX_CODE_LEN = 6;
 
-const s1=document.getElementById("s1");
-const s2=document.getElementById("s2");
-const s3=document.getElementById("s3");
+const s1 = document.getElementById("s1");
+const s2 = document.getElementById("s2");
+const s3 = document.getElementById("s3");
+const s4 = document.getElementById("s4");
 
 function show(screen){
-[s1,s2,s3].forEach(s=>s.classList.remove("active"));
-screen.classList.add("active");
+  [s1,s2,s3,s4].forEach(s=>s.classList.remove("active"));
+  screen.classList.add("active");
 }
 
 function norm(str){
-return (str||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+  return (str||"")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .trim();
 }
 
-/* Indices 1 */
-let hint1=1;
-document.getElementById("more1").onclick=()=>{
-if(hint1<2){
-hint1++;
-document.getElementById("h1_2").style.display="block";
-document.getElementById("counter1").innerText=`Indice ${hint1} / 2`;
-}
-if(hint1===2){
-more1.classList.add("disabled");
-more1.disabled=true;
-}
+/* === Indices 1 === */
+const more1 = document.getElementById("more1");
+let hint1 = 1;
+more1.onclick = () => {
+  if (hint1 < 2){
+    hint1++;
+    document.getElementById("h1_2").style.display = "block";
+    document.getElementById("counter1").innerText = `Indice ${hint1} / 2`;
+  }
+  if (hint1 === 2){
+    more1.classList.add("disabled");
+    more1.disabled = true;
+  }
 };
 
-/* Indices 2 */
-let hint2=1;
-document.getElementById("more2").onclick=()=>{
-if(hint2<3){
-hint2++;
-document.getElementById("h2_"+hint2).style.display="block";
-document.getElementById("counter2").innerText=`Indice ${hint2} / 3`;
-}
-if(hint2===3){
-more2.classList.add("disabled");
-more2.disabled=true;
-}
+/* === Indices 2 (TRÔNE) === */
+const more2 = document.getElementById("more2");
+let hint2 = 1;
+more2.onclick = () => {
+  if (hint2 < 3){
+    hint2++;
+    document.getElementById("h2_" + hint2).style.display = "block";
+    document.getElementById("counter2").innerText = `Indice ${hint2} / 3`;
+  }
+  if (hint2 === 3){
+    more2.classList.add("disabled");
+    more2.disabled = true;
+  }
 };
 
-/* Clavier */
-let pin="";
-const display=document.getElementById("pinDisplay");
-const m1=document.getElementById("m1");
+/* === Indices 3 (BOOBA) === */
+const more3 = document.getElementById("more3");
+let hint3 = 1;
+more3.onclick = () => {
+  if (hint3 < 3){
+    hint3++;
+    document.getElementById("h3_" + hint3).style.display = "block";
+    document.getElementById("counter3").innerText = `Indice ${hint3} / 3`;
+  }
+  if (hint3 === 3){
+    more3.classList.add("disabled");
+    more3.disabled = true;
+  }
+};
+
+/* === Clavier code === */
+let pin = "";
+const display = document.getElementById("pinDisplay");
+const m1 = document.getElementById("m1");
 
 function renderPin(){
-display.textContent=(pin+"_ _ _ _ _ _").substring(0,MAX_CODE_LEN*2).trim();
+  display.textContent = (pin + "_ _ _ _ _ _").substring(0, MAX_CODE_LEN*2).trim();
 }
 renderPin();
 
 document.getElementById("keypad").addEventListener("click",(e)=>{
-const k=e.target.getAttribute("data-k");
-if(k!==null && pin.length<MAX_CODE_LEN){
-pin+=k;
-renderPin();
-}
+  const k = e.target.getAttribute("data-k");
+  if (k !== null && pin.length < MAX_CODE_LEN){
+    pin += k;
+    renderPin();
+  }
 });
 
-backKey.onclick=()=>{pin=pin.slice(0,-1);renderPin();}
-clearKey.onclick=()=>{pin="";renderPin();m1.textContent="";}
+document.getElementById("backKey").onclick = () => { pin = pin.slice(0,-1); renderPin(); };
+document.getElementById("clearKey").onclick = () => { pin = ""; renderPin(); m1.textContent=""; };
 
-b1.onclick=()=>{
-if(VALID_CODES.includes(pin)){
-m1.className="msg ok";
-m1.textContent="✅ Correct !";
-setTimeout(()=>show(s2),400);
-}else{
-m1.className="msg no";
-m1.textContent="❌ Mauvais code…";
-}
+document.getElementById("b1").onclick = () => {
+  if (VALID_CODES.includes(pin)){
+    m1.className = "msg ok";
+    m1.textContent = "✅ Correct !";
+    setTimeout(()=>show(s2), 400);
+  } else {
+    m1.className = "msg no";
+    m1.textContent = "❌ Mauvais code…";
+  }
 };
 
-/* Mot */
-b2.onclick=()=>{
-if(norm(a2.value)==="trone"){
-m2.className="msg ok";
-m2.textContent="✅ Correct !";
-setTimeout(()=>show(s3),400);
-}else{
-m2.className="msg no";
-m2.textContent="❌ Mauvais mot…";
-}
+/* === Mot 2 : TRÔNE === */
+document.getElementById("b2").onclick = () => {
+  const m2 = document.getElementById("m2");
+  const a2 = document.getElementById("a2");
+  if (norm(a2.value) === "trone"){
+    m2.className = "msg ok";
+    m2.textContent = "✅ Correct !";
+    setTimeout(()=>show(s3), 400);
+  } else {
+    m2.className = "msg no";
+    m2.textContent = "❌ Mauvais mot…";
+  }
+};
+
+/* === Mot 3 : BOOBA === */
+document.getElementById("b3").onclick = () => {
+  const m3 = document.getElementById("m3");
+  const a3 = document.getElementById("a3");
+  if (norm(a3.value) === "booba"){
+    m3.className = "msg ok";
+    m3.textContent = "✅ Correct !";
+    setTimeout(()=>show(s4), 400);
+  } else {
+    m3.className = "msg no";
+    m3.textContent = "❌ Mauvais mot…";
+  }
 };
 </script>
 
